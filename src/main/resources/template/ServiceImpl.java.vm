@@ -1,10 +1,10 @@
 package ${package}.${moduleName}.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import ${mainPath}.common.utils.PageUtil;
-import ${mainPath}.common.utils.Query;
+import ${mainPath}.common.util.PageUtil;
+import ${mainPath}.common.util.Query;
 import ${package}.${moduleName}.dao.${className}Dao;
 import ${package}.${moduleName}.entity.${className}Entity;
 import ${package}.${moduleName}.service.${className}Service;
@@ -24,7 +24,8 @@ public class ${className}ServiceImpl extends ServiceImpl<${className}Dao, ${clas
 
     @Override
     public PageUtil queryPage(Map<String, Object> params) {
-        IPage<${className}Entity> page = this.page(new Query<${className}Entity>().getPage(params), new QueryWrapper<>());
+        LambdaQueryWrapper<${className}Entity> qw = new LambdaQueryWrapper<>();
+        IPage<${className}Entity> page = this.page(new Query<${className}Entity>().getPage(params), qw);
         return new PageUtil(page);
     }
 

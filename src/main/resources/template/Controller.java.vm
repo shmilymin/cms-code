@@ -1,8 +1,8 @@
 package ${package}.${moduleName}.controller;
 
-import com.baomidou.mybatisplus.extension.api.R;
 import ${mainPath}.common.annotation.SysLog;
-import ${mainPath}.common.utils.PageUtil;
+import ${mainPath}.common.util.PageUtil;
+import ${mainPath}.common.util.R;
 import ${package}.${moduleName}.entity.${className}Entity;
 import ${package}.${moduleName}.service.${className}Service;
 import org.springframework.beans.factory.annotation.Autowired;
