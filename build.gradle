@@ -1,15 +1,9 @@
-buildscript {
-    repositories {
-        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
-    }
-    dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.2.13.RELEASE'
-    }
+plugins {
+    id 'java'
+    id 'idea'
+    id 'org.springframework.boot' version '2.2.13.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
-
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
 
 group 'com.mm'
 version '1.0-SNAPSHOT'
@@ -21,7 +15,9 @@ bootJar {
 }
 
 repositories {
-    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+    maven {
+        url 'https://maven.aliyun.com/nexus/content/groups/public/'
+    }
 }
 
 dependencies {
