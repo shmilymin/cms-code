@@ -18,11 +18,85 @@
 </head>
 <body>
 <div>
+    <div class="layui-form">
+        <fieldset class="layui-elem-field">
+            <legend>切换数据库</legend>
+            <div class="layui-field-box">
+                <div class="layui-form layui-form-pane">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">IP</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="ip" name="ip" placeholder="IP" lay-verify="required"
+                                   value="127.0.0.1" class="layui-input">
+                        </div>
+                        <label class="layui-form-label">端口</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="port" name="port" placeholder="端口"
+                                   lay-verify="required" value="3306" class="layui-input">
+                        </div>
+                        <label class="layui-form-label">数据库名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="dbName" name="dbName" placeholder="数据库名称"
+                                   lay-verify="required" value="db_name" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">用户名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="username" name="username" placeholder="用户名"
+                                   lay-verify="required" value="root" class="layui-input">
+                        </div>
+                        <label class="layui-form-label">密码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="password" name="password" placeholder="密码"
+                                   lay-verify="required" value="root" class="layui-input">
+                        </div>
+                    </div>
+                    <button type="button" class="layui-btn" id="changeDb">
+                        <i class="layui-icon">&#xe9aa;</i>切换数据库
+                    </button>
+
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="layui-elem-field">
+            <legend>设置属性</legend>
+            <div class="layui-field-box">
+                <div class="layui-form layui-form-pane">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">根包名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="mainPath" name="mainPath" placeholder="根包名(工具类)"
+                                   lay-verify="required" value="com.mm" class="layui-input">
+                        </div>
+                        <label class="layui-form-label">模块包名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="packageName" name="packageName" placeholder="包名"
+                                   lay-verify="required" value="com.mm.modules" class="layui-input">
+                        </div>
+                        <label class="layui-form-label">模块名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="moduleName" name="moduleName" placeholder="模块名称"
+                                   lay-verify="required" value="moduleName" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">作者</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="author" name="author" placeholder="作者"
+                                   lay-verify="required" value="generator" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
     <table class="layui-hide" id="tm" lay-filter="tm"></table>
 </div>
 
 <script type="text/html" id="toolbar">
     <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="refresh">刷新</button>
         <button class="layui-btn layui-btn-sm" lay-event="gen">代码生成</button>
     </div>
 </script>
@@ -31,7 +105,8 @@
 <script>
     layui.use(['table', 'form'], function () {
         const table = layui.table,
-            form = layui.form;
+            form = layui.form,
+            $ = layui.$;
         table.render({
             elem: '#tm'
             , url: 'generator/list'
@@ -61,7 +136,14 @@
                     var tableNames = data.map(function (item) {
                         return item.tableName;
                     });
-                    location.href = "generator/code?tables=" + tableNames.join();
+                    location.href = "generator/code?tables=" + tableNames.join()
+                        + "&mainPath=" + $('#mainPath').val()
+                        + "&packageName=" + $('#packageName').val()
+                        + "&moduleName=" + $('#moduleName').val()
+                        + "&author=" + $('#author').val();
+                    break;
+                case 'refresh':
+                    table.reload('tm')
                     break;
             }
         });
@@ -77,6 +159,30 @@
             });
             return ids;
         }
+
+        $("#changeDb").on("click", function () {
+            $.ajax({
+                type: "post",
+                url: "generator/changeDb",
+                data: {
+                    ip: $('#ip').val(),
+                    port: $('#port').val(),
+                    dbName: $('#dbName').val(),
+                    username: $('#username').val(),
+                    password: $('#password').val()
+                },
+                async: false,
+                success: function (r) {
+                    if (r.code == 0) {
+                        layer.msg('切换成功', {icon: 6});
+                        table.reload('tm');
+                    } else {
+                        layer.msg(r.msg, {icon: 5})
+                    }
+                }
+            })
+            form.render()
+        })
     });
 </script>
 </body>

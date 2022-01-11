@@ -42,7 +42,8 @@ public class GenUtil {
     /**
      * 生成代码
      */
-    public static void generatorCode(Map<String, String> table, List<Map<String, String>> columns, ZipOutputStream zip) {
+    public static void generatorCode(Map<String, String> table, List<Map<String, String>> columns, ZipOutputStream zip,
+                                     String mainPath, String packageName, String moduleName, String author) {
         //配置信息
         Props props = new Props("generator.properties");
 
@@ -95,7 +96,6 @@ public class GenUtil {
         prop.put("file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
         Velocity.init(prop);
 
-        String mainPath = props.getStr("mainPath");
         mainPath = StringUtils.isBlank(mainPath) ? "com.mm" : mainPath;
 
         //封装模板数据
@@ -109,10 +109,9 @@ public class GenUtil {
         map.put("columns", tableEntity.getColumns());
         map.put("hasBigDecimal", hasBigDecimal);
         map.put("mainPath", mainPath);
-        map.put("package", props.getStr("package"));
-        map.put("moduleName", props.getStr("moduleName"));
-        map.put("author", props.getStr("author"));
-        map.put("email", props.getStr("email"));
+        map.put("package", packageName);
+        map.put("moduleName", moduleName);
+        map.put("author", author);
         map.put("datetime", DateUtil.now());
         VelocityContext context = new VelocityContext(map);
 
@@ -127,7 +126,7 @@ public class GenUtil {
             try {
                 //添加到zip
                 zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity.getTableName(),
-                        tableEntity.getClassName(), props.getStr("package"), props.getStr("moduleName"))));
+                        tableEntity.getClassName(), packageName, moduleName)));
                 IoUtil.write(zip, false, sw.toString().getBytes());
                 zip.closeEntry();
             } catch (IOException e) {
