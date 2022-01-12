@@ -1,6 +1,6 @@
 package com.mm.config;
 
-import com.mm.utils.SpringContextUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import javax.sql.DataSource;
@@ -19,7 +19,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     public static Map<Object, Object> dataSourcesMap = new ConcurrentHashMap<>(10);
 
     static {
-        dataSourcesMap.put("defaultDataSource", SpringContextUtil.getBean("defaultDataSource"));
+        dataSourcesMap.put("defaultDataSource", SpringUtil.getBean("defaultDataSource"));
     }
 
 

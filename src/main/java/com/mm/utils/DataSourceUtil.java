@@ -1,5 +1,6 @@
 package com.mm.utils;
 
+import cn.hutool.extra.spring.SpringUtil;
 import com.mm.config.DynamicDataSource;
 import com.mm.controller.dto.DbInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +40,7 @@ public class DataSourceUtil {
     }
 
     public static void addDataSource(DbInfo dbInfo) {
-        DynamicDataSource dynamicDataSource = SpringContextUtil.getBean(DynamicDataSource.class);
+        DynamicDataSource dynamicDataSource = SpringUtil.getBean(DynamicDataSource.class);
         dynamicDataSource.addDataSource(dbInfo.getDbName(), newDataSource(dbInfo));
     }
 
